@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Huerta Escolar Automatizada</title>
+<style>
+  :root {
+    --verde-oscuro: #1B5E20;
+    --verde: #2E7D32;
+    --verde-claro: #66BB6A;
+    --fondo-claro: #F1F8E9;
+    --blanco: #FFFFFF;
+    --gris-texto: #263238;
+    --azul-tech: #1565C0;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--gris-texto);
+    background-color: var(--fondo-claro);
+  }
+
+  h1, h2, h3 {
+    color: var(--verde-oscuro);
+  }
+
+  /* ---------- HEADER ---------- */
+  header {
+    width: 100%;
+    background-color: var(--verde-oscuro);
+    color: var(--blanco);
+    text-align: center;
+    padding: 40px 20px;
+  }
+
+  header .emoji {
+    font-size: 42px;
+    margin-bottom: 10px;
+  }
+
+  header h1 {
+    color: var(--blanco);
+    font-size: 40px;
+    margin-bottom: 10px;
+  }
+
+  header p.subtitulo {
+    font-size: 19px;
+    color: var(--blanco);
+    font-weight: normal;
+  }
+
+  /* ---------- MAIN CONTAINER ---------- */
+  main {
+    max-width: 1100px;
+    width: 90%;
+    margin: 0 auto;
+    padding: 30px 0 60px 0;
+  }
+
+  section {
+    margin-bottom: 40px;
+  }
+
+  section > h2 {
+    font-size: 28px;
+    margin-bottom: 15px;
+    border-left: 6px solid var(--verde);
+    padding-left: 12px;
+  }
+
+  .card {
+    background-color: var(--blanco);
+    border-radius: 14px;
+    padding: 25px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .intro-card p {
+    margin-bottom: 12px;
+  }
+
+  .intro-card p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* ---------- GRIDS ---------- */
+  .grid-tecnologia {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+  }
+
+  .grid-especies {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+  }
+
+  .tech-card, .especie-card {
+    background-color: var(--blanco);
+    border-radius: 14px;
+    padding: 25px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    border-top: 4px solid var(--azul-tech);
+  }
+
+  .especie-card {
+    border-top: 4px solid var(--verde);
+  }
+
+  .tech-card .icono, .especie-card .icono {
+    font-size: 30px;
+    margin-bottom: 8px;
+  }
+
+  .tech-card h3, .especie-card h3 {
+    font-size: 19px;
+    margin-bottom: 8px;
+  }
+
+  .especie-card ul {
+    list-style: none;
+    margin-top: 10px;
+    font-size: 14.5px;
+  }
+
+  .especie-card ul li {
+    margin-bottom: 4px;
+  }
+
+  .especie-card ul li strong {
+    color: var(--verde-oscuro);
+  }
+
+  /* ---------- TABLA ---------- */
+  .tabla-wrapper {
+    overflow-x: auto;
+    background-color: var(--blanco);
+    border-radius: 14px;
+    padding: 25px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 500px;
+  }
+
+  thead th {
+    background-color: var(--verde-oscuro);
+    color: var(--blanco);
+    padding: 12px 10px;
+    text-align: left;
+    font-size: 15px;
+  }
+
+  tbody td {
+    padding: 12px 10px;
+    border: 1px solid #cfe0c9;
+    font-size: 15px;
+  }
+
+  tbody tr:nth-child(even) {
+    background-color: var(--fondo-claro);
+  }
+
+  /* ---------- BOTON ---------- */
+  .btn-riego {
+    display: inline-block;
+    background-color: var(--verde);
+    color: var(--blanco);
+    font-size: 16px;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.15s ease;
+    margin-top: 15px;
+  }
+
+  .btn-riego:hover {
+    background-color: var(--verde-oscuro);
+    transform: translateY(-2px);
+  }
+
+  .seccion-boton {
+    text-align: center;
+  }
+
+  .nota-consola {
+    font-size: 14px;
+    color: var(--gris-texto);
+    margin-top: 10px;
+    font-style: italic;
+  }
+
+  /* ---------- PROCESO ---------- */
+  .proceso {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 20px;
+  }
+
+  .paso-card {
+    background-color: var(--blanco);
+    border-radius: 14px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .paso-numero {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: var(--azul-tech);
+    color: var(--blanco);
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+
+  .paso-card p {
+    font-size: 14.5px;
+  }
+
+  /* ---------- FOOTER ---------- */
+  footer {
+    background-color: var(--verde-oscuro);
+    color: var(--blanco);
+    text-align: center;
+    padding: 25px 15px;
+  }
+
+  footer p {
+    font-size: 14px;
+    margin: 2px 0;
+  }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width: 900px) {
+    .grid-tecnologia,
+    .grid-especies {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .proceso {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (max-width: 600px) {
+    header h1 {
+      font-size: 28px;
+    }
+
+    header p.subtitulo {
+      font-size: 16px;
+    }
+
+    section > h2 {
+      font-size: 22px;
+    }
+
+    .grid-tecnologia,
+    .grid-especies {
+      grid-template-columns: 1fr;
+    }
+
+    .proceso {
+      grid-template-columns: 1fr;
+    }
+
+    main {
+      width: 92%;
+    }
+  }
+</style>
+</head>
+<body>
+
+  <header>
+    <div class="emoji">🌱💧</div>
+    <h1>Huerta Escolar Automatizada</h1>
+    <p class="subtitulo">Tecnología aplicada al cuidado y mantenimiento de nuestra huerta</p>
+  </header>
+
+  <main>
+
+    <!-- OBJETIVO -->
+    <section id="objetivo">
+      <h2>Objetivo del proyecto</h2>
+      <div class="card intro-card">
+        <p>
+          Este proyecto consiste en el desarrollo de una huerta escolar en la que se aplica tecnología
+          para automatizar tareas de cuidado y mantenimiento, como el riego y el monitoreo de las
+          condiciones ambientales. Mediante el uso de sensores de humedad y temperatura, junto con un
+          sistema de control central, la huerta puede analizar su propio estado y activar el riego
+          solamente cuando es necesario, reduciendo así la intervención manual constante.
+        </p>
+        <p>
+          Además de su función práctica, la huerta automatizada cumple un rol educativo: permite que
+          los alumnos comprendan de forma concreta cómo la tecnología puede aplicarse al cuidado del
+          ambiente y a la producción responsable de alimentos, integrando conceptos de programación,
+          electrónica y ciencias naturales en un mismo proyecto.
+        </p>
+      </div>
+    </section>
+
+    <!-- TECNOLOGIA -->
+    <section id="tecnologia">
+      <h2>Tecnología y automatización</h2>
+      <div class="grid-tecnologia">
+        <div class="tech-card">
+          <div class="icono">💧</div>
+          <h3>Sistema de riego automático</h3>
+          <p>Activa el riego de forma programada cuando la humedad del suelo baja del nivel adecuado.</p>
+        </div>
+        <div class="tech-card">
+          <div class="icono">🌡️</div>
+          <h3>Sensor de temperatura</h3>
+          <p>Mide la temperatura ambiente de la huerta para detectar condiciones extremas.</p>
+        </div>
+        <div class="tech-card">
+          <div class="icono">💦</div>
+          <h3>Sensor de humedad del suelo</h3>
+          <p>Detecta la cantidad de agua presente en la tierra antes de cada riego.</p>
+        </div>
+        <div class="tech-card">
+          <div class="icono">🖥️</div>
+          <h3>Sistema de control</h3>
+          <p>Procesa los datos de los sensores y decide cuándo activar el riego automático.</p>
+        </div>
+        <div class="tech-card">
+          <div class="icono">⚡</div>
+          <h3>Alimentación eléctrica</h3>
+          <p>Suministra energía a los sensores, la bomba de agua y el sistema de control.</p>
+        </div>
+        <div class="tech-card">
+          <div class="icono">🌱</div>
+          <h3>Sensores y dispositivos</h3>
+          <p>Conjunto de dispositivos utilizados para controlar en conjunto el estado general de la huerta.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ESPECIES -->
+    <section id="especies">
+      <h2>Especies cultivadas</h2>
+      <div class="grid-especies">
+        <div class="especie-card">
+          <div class="icono">🥬</div>
+          <h3>Lechuga</h3>
+          <p>Hortaliza de hojas verdes de rápido crecimiento, ideal para huertas escolares.</p>
+          <ul>
+            <li><strong>Riego:</strong> moderado</li>
+            <li><strong>Días de riego:</strong> Lunes, Miércoles, Viernes</li>
+          </ul>
+        </div>
+        <div class="especie-card">
+          <div class="icono">🍅</div>
+          <h3>Tomate</h3>
+          <p>Planta que necesita buena exposición al sol y riego regular durante todo su ciclo.</p>
+          <ul>
+            <li><strong>Riego:</strong> alto</li>
+            <li><strong>Días de riego:</strong> Lunes, Martes, Jueves, Sábado</li>
+          </ul>
+        </div>
+        <div class="especie-card">
+          <div class="icono">🥕</div>
+          <h3>Zanahoria</h3>
+          <p>Raíz que crece bajo tierra y requiere humedad constante pero sin encharcamiento.</p>
+          <ul>
+            <li><strong>Riego:</strong> moderado</li>
+            <li><strong>Días de riego:</strong> Martes, Jueves</li>
+          </ul>
+        </div>
+        <div class="especie-card">
+          <div class="icono">🌶️</div>
+          <h3>Rabanito</h3>
+          <p>Hortaliza de ciclo corto que se desarrolla rápidamente con riego frecuente y liviano.</p>
+          <ul>
+            <li><strong>Riego:</strong> frecuente</li>
+            <li><strong>Días de riego:</strong> Lunes, Miércoles, Viernes</li>
+          </ul>
+        </div>
+        <div class="especie-card">
+          <div class="icono">🌿</div>
+          <h3>Albahaca</h3>
+          <p>Hierba aromática sensible al exceso de agua, requiere riego suave y espaciado.</p>
+          <ul>
+            <li><strong>Riego:</strong> bajo</li>
+            <li><strong>Días de riego:</strong> Miércoles</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- CRONOGRAMA DE TAREAS -->
+    <section id="cronograma">
+      <h2>Cronograma de tareas</h2>
+      <div class="tabla-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Día</th>
+              <th>Tarea</th>
+              <th>Responsable/Área</th>
+              <th>Frecuencia</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Lunes</td>
+              <td>Control de humedad</td>
+              <td>Sistema automático</td>
+              <td>Diario</td>
+            </tr>
+            <tr>
+              <td>Martes</td>
+              <td>Revisión de plantas</td>
+              <td>Alumnos</td>
+              <td>Semanal</td>
+            </tr>
+            <tr>
+              <td>Miércoles</td>
+              <td>Riego</td>
+              <td>Sistema automático</td>
+              <td>Según humedad</td>
+            </tr>
+            <tr>
+              <td>Jueves</td>
+              <td>Control de sensores</td>
+              <td>Alumnos</td>
+              <td>Semanal</td>
+            </tr>
+            <tr>
+              <td>Viernes</td>
+              <td>Revisión general</td>
+              <td>Grupo</td>
+              <td>Semanal</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- CONSULTA DE CRONOGRAMA DE RIEGO -->
+    <section id="consulta-riego">
+      <h2>Consulta del cronograma de riego</h2>
+      <div class="card seccion-boton">
+        <p>Al presionar el botón se genera el cronograma de riego a partir de los datos de la huerta.</p>
+        <button class="btn-riego" onclick="regarHuerta()">💧 Consultar cronograma de riego</button>
+        <p class="nota-consola">El resultado se muestra en la consola del navegador (F12 → Console).</p>
+      </div>
+    </section>
+
+    <!-- FUNCIONAMIENTO DEL SISTEMA -->
+    <section id="funcionamiento">
+      <h2>Funcionamiento del sistema</h2>
+      <div class="proceso">
+        <div class="paso-card">
+          <div class="paso-numero">1</div>
+          <p>Los sensores obtienen información de la huerta.</p>
+        </div>
+        <div class="paso-card">
+          <div class="paso-numero">2</div>
+          <p>El sistema analiza los datos obtenidos.</p>
+        </div>
+        <div class="paso-card">
+          <div class="paso-numero">3</div>
+          <p>Se determina si las plantas necesitan riego.</p>
+        </div>
+        <div class="paso-card">
+          <div class="paso-numero">4</div>
+          <p>El sistema activa el riego cuando corresponde.</p>
+        </div>
+        <div class="paso-card">
+          <div class="paso-numero">5</div>
+          <p>La información puede ser supervisada mediante un sistema de control.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>Huerta Escolar Automatizada</p>
+    <p>2026</p>
+    <p>Proyecto escolar</p>
+  </footer>
+
+  <script>
+    // Variable con nombre propio elegido por el grupo (no "diasRiego")
+    // Contiene los días en los que el sistema debe activar el riego automático.
+    const planSemanal = ["Lunes", "Miércoles", "Viernes"];
+
+    // Función obligatoria: genera y muestra el cronograma de riego en consola.
+    function regarHuerta() {
+      console.log("Cronograma de riego de la huerta:");
+      for (let i = 0; i < planSemanal.length; i++) {
+        console.log(planSemanal[i] + " → Riego programado");
+      }
+    }
+  </script>
+
+</body>
+</html>
