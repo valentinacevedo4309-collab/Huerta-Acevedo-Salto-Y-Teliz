@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calendario de Siembra | Huerta Escolar</title>
+<meta name="description" content="Calendario interactivo de siembra y tareas para la Huerta Escolar Automatizada.">
+<link rel="icon" href="https://fav.farm/🌱" type="image/x-icon">
+<style>
+  :root {
+    --verde-oscuro: #1B5E20;
+    --verde: #2E7D32;
+    --verde-claro: #66BB6A;
+    --fondo-claro: #F1F8E9;
+    --blanco: #FFFFFF;
+    --gris-texto: #263238;
+    --azul-tech: #1565C0;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--gris-texto);
+    background-color: var(--fondo-claro);
+  }
+
+  header {
+    width: 100%;
+    background-color: var(--verde-oscuro);
+    color: var(--blanco);
+    text-align: center;
+    padding: 30px 20px;
+  }
+
+  header .emoji { font-size: 42px; margin-bottom: 10px; }
+  header h1 { color: var(--blanco); font-size: 38px; margin-bottom: 10px; }
+  header p.subtitulo { font-size: 18px; color: var(--blanco); }
+
+  .main-nav {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+  }
+
+  .main-nav a {
+    color: var(--blanco);
+    text-decoration: none;
+    font-weight: bold;
+    padding: 8px 18px;
+    border-radius: 20px;
+    background-color: rgba(255, 255, 255, 0.15);
+    transition: background-color 0.2s ease;
+  }
+
+  .main-nav a:hover, .main-nav a.active {
+    background-color: var(--verde-claro);
+    color: var(--verde-oscuro);
+  }
+
+  main {
+    max-width: 1100px;
+    width: 90%;
+    margin: 0 auto;
+    padding: 30px 0 60px 0;
+  }
+
+  .card {
+    background-color: var(--blanco);
+    border-radius: 14px;
+    padding: 25px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .cal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .cal-btn {
+    background-color: var(--verde);
+    color: var(--blanco);
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+
+  .cal-btn:hover { background-color: var(--verde-oscuro); }
+
+  .cal-semana {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    font-weight: bold;
+    color: var(--verde-oscuro);
+    margin-bottom: 10px;
+  }
+
+  .cal-dias {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+  }
+
+  /* Casilla alta donde el texto queda visible directo arriba */
+  .cal-dia {
+    min-height: 100px;
+    background-color: var(--fondo-claro);
+    border-radius: 10px;
+    padding: 6px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.2s;
+  }
+
+  .cal-dia:hover:not(.vacio) {
+    border-color: var(--verde-claro);
+    background-color: #E8F5E9;
+  }
+
+  .cal-dia.vacio {
+    background-color: transparent;
+    cursor: default;
+  }
+
+  .num-dia {
+    font-weight: bold;
+    font-size: 14px;
+    color: var(--verde-oscuro);
+    margin-bottom: 4px;
+  }
+
+  /* Etiqueta de la tarea integrada en la tarjeta del día */
+  .tarea-texto {
+    background-color: var(--verde-claro);
+    color: var(--verde-oscuro);
+    font-size: 11px;
+    font-weight: bold;
+    padding: 4px 6px;
+    border-radius: 4px;
+    margin-top: 3px;
+    word-break: break-word;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .btn-borrar-mini {
+    background: none;
+    border: none;
+    color: #b71c1c;
+    cursor: pointer;
+    font-size: 11px;
+    margin-left: 4px;
+  }
+
+  footer { background-color: var(--verde-oscuro); color: var(--blanco); text-align: center; padding: 25px 15px; }
+
+  @media (max-width: 768px) {
+    .cal-dia { min-height: 75px; padding: 4px; }
+    .tarea-texto { font-size: 9px; }
+    .main-nav { flex-direction: column; gap: 10px; }
+  }
+</style>
+</head>
+<body>
+
+  <header>
+    <div class="emoji">📅🌱</div>
+    <h1>Calendario de Siembra</h1>
+    <p class="subtitulo">Haz clic en cualquier casilla para agregar tu tarea de siembra directamente en la fecha</p>
+
+    <nav class="main-nav">
+      <a href="index.html">Inicio</a>
+      <a href="calendario.html" class="active">Calendario de Siembra</a>
+    </nav>
+  </header>
+
+  <main>
+    <section>
+      <h2>Planificación Mensual</h2>
+      <div class="card">
+        <div class="cal-header">
+          <button class="cal-btn" id="prev-mes">&lt; Anterior</button>
+          <h3 id="mes-año"></h3>
+          <button class="cal-btn" id="next-mes">Siguiente &gt;</button>
+        </div>
+
+        <div class="cal-semana">
+          <div>Dom</div><div>Lun</div><div>Mar</div><div>Mié</div><div>Jue</div><div>Vie</div><div>Sáb</div>
+        </div>
+
+        <div class="cal-dias" id="grid-dias"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>Huerta Escolar Automatizada · E.E.S.T. N°1 "Julio A. Roca"</p>
+    <p>2026</p>
+  </footer>
+
+  <script>
+    let fechaActual = new Date();
+    const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+
+    document.addEventListener("DOMContentLoaded", () => {
+      renderizarCalendario();
+
+      document.getElementById("prev-mes").addEventListener("click", () => {
+        fechaActual.setMonth(fechaActual.getMonth() - 1);
+        renderizarCalendario();
+      });
+
+      document.getElementById("next-mes").addEventListener("click", () => {
+        fechaActual.setMonth(fechaActual.getMonth() + 1);
+        renderizarCalendario();
+      });
+    });
+
+    function renderizarCalendario() {
+      const año = fechaActual.getFullYear();
+      const mes = fechaActual.getMonth();
+
+      document.getElementById("mes-año").innerText = `${meses[mes]} ${año}`;
+
+      const primerDiaIndice = new Date(año, mes, 1).getDay();
+      const ultimoDiaFecha = new Date(año, mes + 1, 0).getDate();
+
+      const grid = document.getElementById("grid-dias");
+      grid.innerHTML = "";
+
+      for (let i = 0; i < primerDiaIndice; i++) {
+        const vacio = document.createElement("div");
+        vacio.className = "cal-dia vacio";
+        grid.appendChild(vacio);
+      }
+
+      const tareas = JSON.parse(localStorage.getItem("tareasHuerta")) || {};
+
+      for (let dia = 1; dia <= ultimoDiaFecha; dia++) {
+        const diaEl = document.createElement("div");
+        diaEl.className = "cal-dia";
+
+        const numEl = document.createElement("span");
+        numEl.className = "num-dia";
+        numEl.innerText = dia;
+        diaEl.appendChild(numEl);
+
+        const claveFecha = `${año}-${String(mes + 1).padStart(2, '0')}-${String(dia).padStart(2, '0')}`;
+
+        if (tareas[claveFecha] && tareas[claveFecha].length > 0) {
+          tareas[claveFecha].forEach((tarea, index) => {
+            const tagTarea = document.createElement("div");
+            tagTarea.className = "tarea-texto";
+            tagTarea.innerHTML = `<span>${tarea}</span> <button class="btn-borrar-mini" onclick="event.stopPropagation(); eliminarTarea('${claveFecha}', ${index})">✖</button>`;
+            diaEl.appendChild(tagTarea);
+          });
+        }
+
+        diaEl.addEventListener("click", () => agregarTarea(claveFecha, dia, meses[mes]));
+        grid.appendChild(diaEl);
+      }
+    }
+
+    function agregarTarea(claveFecha, dia, nombreMes) {
+      const texto = prompt(`Escribe la actividad para el ${dia} de ${nombreMes}:`);
+      if (texto && texto.trim() !== "") {
+        const tareas = JSON.parse(localStorage.getItem("tareasHuerta")) || {};
+        if (!tareas[claveFecha]) tareas[claveFecha] = [];
+        
+        tareas[claveFecha].push(texto.trim());
+        localStorage.setItem("tareasHuerta", JSON.stringify(tareas));
+        renderizarCalendario();
+      }
+    }
+
+    function eliminarTarea(claveFecha, index) {
+      const tareas = JSON.parse(localStorage.getItem("tareasHuerta")) || {};
+      if (tareas[claveFecha]) {
+        tareas[claveFecha].splice(index, 1);
+        if (tareas[claveFecha].length === 0) delete tareas[claveFecha];
+        localStorage.setItem("tareasHuerta", JSON.stringify(tareas));
+        renderizarCalendario();
+      }
+    }
+  </script>
+
+</body>
+</html>
